@@ -1,0 +1,98 @@
+import random
+
+# Distance between 4 cities
+dist = [
+    [0, 10, 15, 20],
+    [10, 0, 35, 25],
+    [15, 35, 0, 30],
+    [20, 25, 30, 0]
+]
+
+n = 4
+ants = 5
+iterations = 20
+pheromone = [[1]*n for _ in range(n)]
+alpha, beta, rho, Q = 1, 2, 0.5, 100
+
+best_path = None
+best_cost = float('inf')
+
+for _ in range(iterations):
+    for ant in range(ants):
+        path = [random.randrange(n)]
+
+        while len(path) < n:
+            current = path[-1]
+            choices = [i for i in range(n) if i not in path]
+            next_city = min(choices,
+                key=lambda i: dist[current][i])
+            path.append(next_city)
+
+        cost = sum(dist[path[i]][path[i+1]]
+                   for i in range(n-1))
+        cost += dist[path[-1]][path[0]]
+
+        if cost < best_cost:
+            best_cost = cost
+            best_path = path[:]
+
+        for i in range(n):
+            a, b = path[i], path[(i+1) % n]
+            pheromone[a][b] += Q / cost
+            pheromone[b][a] += Q / cost
+
+    for i in range(n):
+        for j in range(n):
+            pheromone[i][j] *= (1 - rho)
+
+print("Best path:", best_path + [best_path[0]])
+print("Minimum distance:", best_cost)
+import random
+
+# Distance between 4 cities
+dist = [
+    [0, 10, 15, 20],
+    [10, 0, 35, 25],
+    [15, 35, 0, 30],
+    [20, 25, 30, 0]
+]
+
+n = 4
+ants = 5
+iterations = 20
+pheromone = [[1]*n for _ in range(n)]
+alpha, beta, rho, Q = 1, 2, 0.5, 100
+
+best_path = None
+best_cost = float('inf')
+
+for _ in range(iterations):
+    for ant in range(ants):
+        path = [random.randrange(n)]
+
+        while len(path) < n:
+            current = path[-1]
+            choices = [i for i in range(n) if i not in path]
+            next_city = min(choices,
+                key=lambda i: dist[current][i])
+            path.append(next_city)
+
+        cost = sum(dist[path[i]][path[i+1]]
+                   for i in range(n-1))
+        cost += dist[path[-1]][path[0]]
+
+        if cost < best_cost:
+            best_cost = cost
+            best_path = path[:]
+
+        for i in range(n):
+            a, b = path[i], path[(i+1) % n]
+            pheromone[a][b] += Q / cost
+            pheromone[b][a] += Q / cost
+
+    for i in range(n):
+        for j in range(n):
+            pheromone[i][j] *= (1 - rho)
+
+print("Best path:", best_path + [best_path[0]])
+print("Minimum distance:", best_cost)
